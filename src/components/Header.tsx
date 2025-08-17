@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Home, Megaphone, Briefcase, AlertTriangle, Newspaper } from "lucide-react";
+import { Menu, X, Home, Megaphone, Briefcase, AlertTriangle, Newspaper, Settings } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,6 +50,12 @@ const Header = () => {
                 <span>{item.name}</span>
               </Button>
             ))}
+            <Link to="/admin/login">
+              <Button variant="outline" size="sm" className="flex items-center gap-2 ml-2">
+                <Settings className="h-4 w-4" />
+                Admin
+              </Button>
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}

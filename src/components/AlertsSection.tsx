@@ -1,54 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Droplets, Zap, Shield, Clock, MapPin } from "lucide-react";
+import { useAdmin } from "@/context/AdminContext";
 
 const AlertsSection = () => {
-  const alerts = [
-    {
-      id: 1,
-      type: "Water",
-      title: "Water Supply Maintenance",
-      description: "Scheduled water maintenance will cause temporary supply interruption. Water trucks will be stationed at marked locations.",
-      severity: "medium",
-      locations: ["Corner of Main & Oak Street", "Community Center", "Park Entrance"],
-      time: "Tomorrow 09:00 - 15:00",
-      icon: Droplets,
-      posted: "2 hours ago"
-    },
-    {
-      id: 2,
-      type: "Electricity",
-      title: "Planned Power Outage",
-      description: "Load shedding scheduled for maintenance of electrical infrastructure in Sectors A and B.",
-      severity: "high",
-      locations: ["Sector A", "Sector B", "Industrial Area"],
-      time: "Tonight 22:00 - 06:00",
-      icon: Zap,
-      posted: "4 hours ago"
-    },
-    {
-      id: 3,
-      type: "Security",
-      title: "Increased Security Patrols",
-      description: "Enhanced security measures in effect following recent incidents. Please report any suspicious activities immediately.",
-      severity: "high",
-      locations: ["All residential areas", "Walking paths", "Parking areas"],
-      time: "Effective immediately",
-      icon: Shield,
-      posted: "1 day ago"
-    },
-    {
-      id: 4,
-      type: "Water",
-      title: "New Water Collection Points",
-      description: "Additional water collection points have been established to improve access during maintenance periods.",
-      severity: "low",
-      locations: ["Sports Complex", "Shopping Center", "School Grounds"],
-      time: "Permanent installation",
-      icon: Droplets,
-      posted: "3 days ago"
-    }
-  ];
+  const { alerts } = useAdmin();
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

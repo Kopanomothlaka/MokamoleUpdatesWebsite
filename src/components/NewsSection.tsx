@@ -2,55 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Newspaper, Calendar, User, ExternalLink, Play } from "lucide-react";
+import { useAdmin } from "@/context/AdminContext";
 
 const NewsSection = () => {
-  const news = [
-    {
-      id: 1,
-      title: "New Playground Equipment Installed",
-      summary: "The community playground has received new, modern equipment thanks to fundraising efforts by local residents.",
-      content: "After months of planning and fundraising, our community playground now features state-of-the-art equipment suitable for children of all ages. The new installation includes accessible play structures, ensuring all children can enjoy the facilities.",
-      author: "Community Board",
-      date: "2024-01-20",
-      category: "Infrastructure",
-      image: "/placeholder-playground.jpg",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Community Garden Harvest Festival",
-      summary: "Join us for the annual harvest festival celebrating our community garden's success this season.",
-      content: "Our community garden has had an exceptional harvest this year. Come celebrate with fresh produce, live music, and family activities. All proceeds will go towards expanding the garden facilities.",
-      author: "Sarah Martinez",
-      date: "2024-01-18",
-      category: "Events",
-      image: "/placeholder-garden.jpg",
-      featured: false
-    },
-    {
-      id: 3,
-      title: "New Recycling Program Launch",
-      summary: "Advanced recycling program starts next month with door-to-door collection and sorting facilities.",
-      content: "We're excited to announce a comprehensive recycling program that will significantly reduce our community's environmental footprint. The program includes weekly collection and educational workshops.",
-      author: "Environmental Committee",
-      date: "2024-01-15",
-      category: "Environment",
-      image: "/placeholder-recycling.jpg",
-      videoLink: "https://example.com/recycling-video",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Youth Soccer League Championship",
-      summary: "Our community youth soccer team has won the regional championship for the second consecutive year.",
-      content: "Congratulations to our young athletes and their dedicated coaches. The team's hard work and community support have led to this outstanding achievement.",
-      author: "Sports Committee",
-      date: "2024-01-12",
-      category: "Sports",
-      image: "/placeholder-soccer.jpg",
-      featured: false
-    }
-  ];
+  const { news } = useAdmin();
 
   const getCategoryColor = (category: string) => {
     switch (category) {

@@ -2,70 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Briefcase, MapPin, DollarSign, Clock, Phone, Mail } from "lucide-react";
+import { useAdmin } from "@/context/AdminContext";
 
 const JobsSection = () => {
-  const jobs = [
-    {
-      id: 1,
-      title: "Community Garden Coordinator",
-      company: "Green Spaces Initiative",
-      type: "Part-time",
-      salary: "R8,000 - R12,000",
-      location: "Community Garden",
-      description: "Coordinate community garden activities, manage volunteers, and maintain garden facilities.",
-      requirements: ["Experience in gardening", "Good communication skills", "Available weekends"],
-      contact: {
-        phone: "011-234-5678",
-        email: "gardens@community.org"
-      },
-      posted: "2 days ago"
-    },
-    {
-      id: 2,
-      title: "After-School Tutor",
-      company: "Community Education Center",
-      type: "Part-time",
-      salary: "R200 per hour",
-      location: "Community Center",
-      description: "Provide tutoring support for primary and high school students in mathematics and English.",
-      requirements: ["Matric certificate", "Experience with children", "Patient and encouraging"],
-      contact: {
-        phone: "011-345-6789",
-        email: "education@community.org"
-      },
-      posted: "1 week ago"
-    },
-    {
-      id: 3,
-      title: "Security Guard",
-      company: "SafeGuard Security",
-      type: "Full-time",
-      salary: "R15,000 - R18,000",
-      location: "Community Entrance",
-      description: "Monitor community entrance, conduct patrols, and ensure resident safety 24/7.",
-      requirements: ["PSIRA registration", "Grade 10 minimum", "Clean criminal record"],
-      contact: {
-        phone: "011-456-7890",
-        email: "jobs@safeguard.co.za"
-      },
-      posted: "3 days ago"
-    },
-    {
-      id: 4,
-      title: "Maintenance Assistant",
-      company: "Community Maintenance",
-      type: "Full-time",
-      salary: "R12,000 - R16,000",
-      location: "Various locations",
-      description: "Assist with general maintenance tasks including plumbing, electrical, and landscaping work.",
-      requirements: ["Handyman experience", "Own transport", "Available for emergencies"],
-      contact: {
-        phone: "011-567-8901",
-        email: "maintenance@community.org"
-      },
-      posted: "5 days ago"
-    }
-  ];
+  const { jobs } = useAdmin();
 
   const getTypeColor = (type: string) => {
     switch (type) {
