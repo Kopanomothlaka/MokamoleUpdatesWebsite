@@ -19,6 +19,12 @@ const AdminJobs = () => {
     description: '',
     requirements: '',
     contactDetails: '',
+    type: '',
+    company: '',
+    salary: '',
+    location: '',
+    phone: '',
+    email: '',
   });
 
   const resetForm = () => {
@@ -27,6 +33,12 @@ const AdminJobs = () => {
       description: '',
       requirements: '',
       contactDetails: '',
+      type: '',
+      company: '',
+      salary: '',
+      location: '',
+      phone: '',
+      email: '',
     });
     setEditingJob(null);
   };
@@ -35,13 +47,23 @@ const AdminJobs = () => {
     e.preventDefault();
     
     if (editingJob) {
-      updateJob(editingJob.id, formData);
+      updateJob(editingJob.id, {
+        ...formData,
+        requirements: formData.requirements.split('\n').filter(req => req.trim()),
+        contact: { phone: formData.phone, email: formData.email },
+        posted: editingJob.posted
+      });
       toast({
         title: "Job Updated",
         description: "Job posting has been successfully updated.",
       });
     } else {
-      addJob(formData);
+      addJob({
+        ...formData,
+        requirements: formData.requirements.split('\n').filter(req => req.trim()),
+        contact: { phone: formData.phone, email: formData.email },
+        posted: 'Just now'
+      });
       toast({
         title: "Job Added",
         description: "New job posting has been added.",
@@ -57,8 +79,14 @@ const AdminJobs = () => {
     setFormData({
       title: job.title,
       description: job.description,
-      requirements: job.requirements,
+      requirements: Array.isArray(job.requirements) ? job.requirements.join('\n') : job.requirements,
       contactDetails: job.contactDetails,
+      type: job.type || '',
+      company: job.company || '',
+      salary: job.salary || '',
+      location: job.location || '',
+      phone: job.contact?.phone || '',
+      email: job.contact?.email || '',
     });
     setIsDialogOpen(true);
   };
@@ -114,25 +142,81 @@ const AdminJobs = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="requirements">Requirements</Label>
+                <Label htmlFor="requirements">Requirements (one per line)</Label>
                 <Textarea
                   id="requirements"
                   value={formData.requirements}
                   onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                  placeholder="Job requirements"
+                  placeholder="Job requirements - one per line"
                   rows={3}
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="contactDetails">Contact Details</Label>
-                <Input
-                  id="contactDetails"
-                  value={formData.contactDetails}
-                  onChange={(e) => setFormData({ ...formData, contactDetails: e.target.value })}
-                  placeholder="Email or phone number"
-                  required
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type">Job Type</Label>
+                  <Input
+                    id="type"
+                    value={formData.type}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                    placeholder="Full-time, Part-time, Contract"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="company">Company</Label>
+                  <Input
+                    id="company"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    placeholder="Company name"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="salary">Salary</Label>
+                  <Input
+                    id="salary"
+                    value={formData.salary}
+                    onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
+                    placeholder="$15-20/hour"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    placeholder="Job location"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="Contact phone"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="Contact email"
+                    required
+                  />
+                </div>
               </div>
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
@@ -177,7 +261,12 @@ const AdminJobs = () => {
             <CardContent className="space-y-4">
               <div>
                 <h4 className="font-medium mb-2">Requirements:</h4>
-                <p className="text-sm text-muted-foreground">{job.requirements}</p>
+                <ul className="text-sm text-muted-foreground list-disc list-inside">
+                  {Array.isArray(job.requirements) 
+                    ? job.requirements.map((req, index) => <li key={index}>{req}</li>)
+                    : <li>{job.requirements}</li>
+                  }
+                </ul>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="h-4 w-4" />

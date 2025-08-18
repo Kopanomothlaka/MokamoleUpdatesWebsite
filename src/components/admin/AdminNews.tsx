@@ -38,6 +38,10 @@ const AdminNews = () => {
       ...formData,
       image: formData.image || undefined,
       videoLink: formData.videoLink || undefined,
+      category: 'General',
+      author: 'Admin',
+      date: 'Today',
+      summary: formData.content.substring(0, 100) + '...'
     };
     
     if (editingNews) {

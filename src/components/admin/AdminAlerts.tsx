@@ -41,7 +41,12 @@ const AdminAlerts = () => {
         description: "Alert has been successfully updated.",
       });
     } else {
-      addAlert(formData);
+      addAlert({
+        ...formData,
+        icon: 'AlertTriangle',
+        severity: 'medium',
+        posted: 'Just now'
+      });
       toast({
         title: "Alert Added",
         description: "New alert has been posted.",

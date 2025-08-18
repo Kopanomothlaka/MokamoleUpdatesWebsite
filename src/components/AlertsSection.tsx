@@ -49,7 +49,8 @@ const AlertsSection = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {alerts.map((alert) => {
-            const IconComponent = alert.icon;
+            const iconMap = { AlertTriangle, Droplets, Zap, Shield };
+            const IconComponent = iconMap[alert.icon as keyof typeof iconMap] || AlertTriangle;
             return (
               <Card 
                 key={alert.id} 

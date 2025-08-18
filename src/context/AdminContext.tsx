@@ -15,9 +15,18 @@ export interface Job {
   id: string;
   title: string;
   description: string;
-  requirements: string;
+  requirements: string[];
   contactDetails: string;
   createdAt: string;
+  type: string;
+  posted: string;
+  company: string;
+  salary: string;
+  location: string;
+  contact: {
+    phone: string;
+    email: string;
+  };
 }
 
 export interface Alert {
@@ -26,6 +35,11 @@ export interface Alert {
   description: string;
   type: 'water' | 'electricity' | 'crime' | 'general';
   createdAt: string;
+  icon: string;
+  severity: 'high' | 'medium' | 'low';
+  posted: string;
+  time?: string;
+  locations?: string[];
 }
 
 export interface News {
@@ -35,6 +49,11 @@ export interface News {
   image?: string;
   videoLink?: string;
   createdAt: string;
+  featured?: boolean;
+  category: string;
+  author: string;
+  date: string;
+  summary: string;
 }
 
 interface AdminContextType {
@@ -100,10 +119,19 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     {
       id: '1',
       title: 'Community Garden Coordinator',
-      description: 'Help manage our community garden project.',
-      requirements: 'Experience with gardening, leadership skills',
+      description: 'Help manage our community garden project and coordinate volunteer activities.',
+      requirements: ['Experience with gardening', 'Leadership skills', 'Available weekends'],
       contactDetails: 'garden@community.com',
       createdAt: new Date().toISOString(),
+      type: 'Part-time',
+      posted: '2 days ago',
+      company: 'Community Garden Initiative',
+      salary: '$15-20/hour',
+      location: 'Community Garden, Main St',
+      contact: {
+        phone: '+1 (555) 123-4567',
+        email: 'garden@community.com'
+      }
     },
   ]);
 
@@ -114,6 +142,11 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       description: 'Water will be turned off from 9 AM to 3 PM for maintenance.',
       type: 'water',
       createdAt: new Date().toISOString(),
+      icon: 'Droplets',
+      severity: 'high',
+      posted: '1 hour ago',
+      time: '9 AM - 3 PM',
+      locations: ['Main Street', 'Oak Avenue', 'Pine Road']
     },
   ]);
 
@@ -121,8 +154,13 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     {
       id: '1',
       title: 'New Community Center Opening',
-      content: 'We are excited to announce the opening of our new community center!',
+      content: 'We are excited to announce the opening of our new community center! This facility will provide a space for meetings, events, and community activities.',
       createdAt: new Date().toISOString(),
+      featured: true,
+      category: 'Announcements',
+      author: 'Community Board',
+      date: 'Today',
+      summary: 'Grand opening of the new community center with facilities for meetings and events.'
     },
   ]);
 
