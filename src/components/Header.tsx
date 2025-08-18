@@ -8,9 +8,7 @@ const Header = () => {
 
   const navItems = [
     { name: "News", href: "/", icon: Newspaper },
-    { name: "Updates", href: "/updates", icon: Megaphone },
     { name: "Jobs", href: "/jobs", icon: Briefcase },
-    { name: "Alerts", href: "/alerts", icon: AlertTriangle },
   ];
 
   const handleNavigation = (href: string) => {
