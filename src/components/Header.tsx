@@ -7,18 +7,13 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Home", href: "#home", icon: Home },
-    { name: "Updates", href: "#updates", icon: Megaphone },
-    { name: "Jobs", href: "#jobs", icon: Briefcase },
-    { name: "Alerts", href: "#alerts", icon: AlertTriangle },
-    { name: "News", href: "#news", icon: Newspaper },
+    { name: "News", href: "/", icon: Newspaper },
+    { name: "Updates", href: "/updates", icon: Megaphone },
+    { name: "Jobs", href: "/jobs", icon: Briefcase },
+    { name: "Alerts", href: "/alerts", icon: AlertTriangle },
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleNavigation = (href: string) => {
     setIsMenuOpen(false);
   };
 
@@ -40,15 +35,14 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => (
-              <Button
+              <Link
                 key={item.name}
-                variant="ghost"
-                className="flex items-center space-x-2 hover:bg-accent"
-                onClick={() => scrollToSection(item.href)}
+                to={item.href}
+                className="flex items-center space-x-2 px-3 py-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 <item.icon className="w-4 h-4" />
                 <span>{item.name}</span>
-              </Button>
+              </Link>
             ))}
             <Link to="/admin/login">
               <Button variant="outline" size="sm" className="flex items-center gap-2 ml-2">
@@ -74,15 +68,15 @@ const Header = () => {
           <nav className="md:hidden mt-4 pb-4 border-t pt-4 animate-fade-in">
             <div className="flex flex-col space-y-2">
               {navItems.map((item) => (
-                <Button
+                <Link
                   key={item.name}
-                  variant="ghost"
-                  className="flex items-center justify-start space-x-3 w-full hover:bg-accent"
-                  onClick={() => scrollToSection(item.href)}
+                  to={item.href}
+                  className="flex items-center justify-start space-x-3 w-full px-3 py-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                  onClick={() => handleNavigation(item.href)}
                 >
                   <item.icon className="w-5 h-5" />
                   <span>{item.name}</span>
-                </Button>
+                </Link>
               ))}
             </div>
           </nav>
