@@ -9,7 +9,6 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
-        <NewsSection />
       </main>
       <Footer />
     </div>
