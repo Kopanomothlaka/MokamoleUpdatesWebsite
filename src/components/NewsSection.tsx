@@ -1,11 +1,56 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Newspaper, Calendar, User, ExternalLink, Play } from "lucide-react";
-import { useAdmin } from "@/context/AdminContext";
+import { Newspaper, Calendar, User, ExternalLink, Play, AlertCircle } from "lucide-react";
+import { getSupabase } from "@/lib/supabase";
+
+interface NewsArticle {
+  id: string;
+  title: string;
+  content: string;
+  summary: string;
+  category: string;
+  author: string;
+  date: string;
+  featured: boolean;
+  videoLink?: string;
+  imageUrl?: string;
+}
 
 const NewsSection = () => {
-  const { news } = useAdmin();
+  const [news, setNews] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const supabase = getSupabase();
+        const { data, error: supabaseError } = await supabase
+          .from('news')
+          .select('*')
+          .order('date', { ascending: false });
+
+        if (supabaseError) throw supabaseError;
+        setNews((data as unknown as NewsArticle[]) || []);
+      } catch (err: any) {
+        if (err?.message && /relation .* does not exist/i.test(err.message)) {
+          setError("Table 'news' not found. Run the SQL in SUPABASE_SETUP.md to create tables.");
+        } else if (err?.message && /permission denied|rls/i.test(err.message)) {
+          setError("RLS is blocking reads. Add a public SELECT policy for 'news' as per SUPABASE_SETUP.md.");
+        } else if (err?.message) {
+          setError(err.message);
+        } else {
+          setError("Failed to fetch news");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -21,6 +66,33 @@ const NewsSection = () => {
         return "bg-secondary text-secondary-foreground";
     }
   };
+
+  if (loading) return (
+    <section id="news" className="py-16 bg-gradient-community">
+      <div className="container mx-auto px-4 text-center">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-pulse text-muted-foreground">
+            <Newspaper className="w-12 h-12 mx-auto mb-4" />
+            <p>Loading news...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+  
+  if (error) return (
+    <section id="news" className="py-16 bg-gradient-community">
+      <div className="container mx-auto px-4">
+        <div className="bg-destructive/10 text-destructive p-6 rounded-lg border border-destructive/20">
+          <div className="flex items-center mb-2">
+            <AlertCircle className="w-5 h-5 mr-2" />
+            <h3 className="text-lg font-semibold">Error loading news</h3>
+          </div>
+          <p>{error}</p>
+        </div>
+      </div>
+    </section>
+  );
 
   const featuredNews = news.find(item => item.featured);
   const regularNews = news.filter(item => !item.featured);
@@ -46,10 +118,18 @@ const NewsSection = () => {
             <Card className="hover:shadow-card transition-all duration-300 animate-fade-in border-l-4 border-l-primary overflow-hidden">
               <div className="grid md:grid-cols-2 gap-0">
                 <div className="aspect-video md:aspect-auto bg-muted flex items-center justify-center">
-                  <div className="text-muted-foreground text-center">
-                    <Newspaper className="w-16 h-16 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Featured Image</p>
-                  </div>
+                  {featuredNews.imageUrl ? (
+                    <img 
+                      src={featuredNews.imageUrl} 
+                      alt={featuredNews.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-muted-foreground text-center">
+                      <Newspaper className="w-16 h-16 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">Featured Image</p>
+                    </div>
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
@@ -77,10 +157,12 @@ const NewsSection = () => {
                         {new Date(featuredNews.date).toLocaleDateString()}
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
-                      Read More
-                      <ExternalLink className="w-4 h-4 ml-1" />
-                    </Button>
+                    <a href={`/news/${featuredNews.id}`}>
+                      <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
+                        Read More
+                        <ExternalLink className="w-4 h-4 ml-1" />
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -96,10 +178,18 @@ const NewsSection = () => {
               className="hover:shadow-card transition-all duration-300 hover:scale-105 animate-fade-in overflow-hidden"
             >
               <div className="aspect-video bg-muted flex items-center justify-center">
-                <div className="text-muted-foreground text-center">
-                  <Newspaper className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p className="text-xs">Article Image</p>
-                </div>
+                {article.imageUrl ? (
+                  <img 
+                    src={article.imageUrl} 
+                    alt={article.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-muted-foreground text-center">
+                    <Newspaper className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p className="text-xs">Article Image</p>
+                  </div>
+                )}
               </div>
               
               <CardHeader className="pb-3">
@@ -134,8 +224,8 @@ const NewsSection = () => {
                   </div>
                 </div>
                 
-                <Button variant="outline" size="sm" className="w-full">
-                  Read Full Article
+                <Button variant="outline" size="sm" className="w-full" asChild>
+                  <a href={`/news/${article.id}`}>Read Full Article</a>
                 </Button>
               </CardContent>
             </Card>

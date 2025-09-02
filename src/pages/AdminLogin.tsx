@@ -8,7 +8,7 @@ import { useAdmin } from '@/context/AdminContext';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, isLoggedIn } = useAdmin();
   const { toast } = useToast();
@@ -17,20 +17,13 @@ const AdminLogin = () => {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (login(username, password)) {
-      toast({
-        title: "Login Successful",
-        description: "Welcome to the admin dashboard!",
-      });
+    const ok = await login(email, password);
+    if (ok) {
+      toast({ title: 'Login Successful', description: 'Welcome to the admin dashboard!' });
     } else {
-      toast({
-        title: "Login Failed",
-        description: "Invalid credentials. Try admin/admin123",
-        variant: "destructive",
-      });
+      toast({ title: 'Login Failed', description: 'Invalid credentials.', variant: 'destructive' });
     }
   };
 
@@ -39,40 +32,19 @@ const AdminLogin = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to access the admin dashboard
-          </CardDescription>
+          <CardDescription>Enter your credentials to access the admin dashboard</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter username"
-                required
-              />
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                required
-              />
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required />
             </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
-            <p className="text-sm text-muted-foreground text-center">
-              Demo credentials: admin / admin123
-            </p>
+            <Button type="submit" className="w-full">Login</Button>
           </form>
         </CardContent>
       </Card>

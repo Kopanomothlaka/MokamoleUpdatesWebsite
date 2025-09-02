@@ -6,7 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AdminProvider } from "@/context/AdminContext";
 import Index from "./pages/Index";
 import News from "./pages/News";
+import NewsDetail from "./pages/NewsDetail";
 import Jobs from "./pages/Jobs";
+import JobApply from "./pages/JobApply";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -23,7 +25,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
             <Route path="/jobs" element={<Jobs />} />
+            <Route path="/jobs/apply" element={<JobApply />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />

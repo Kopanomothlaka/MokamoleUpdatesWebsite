@@ -1,7 +1,10 @@
 import { Heart, Phone, Mail, MapPin, Facebook, Twitter, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  
   return (
     <footer className="bg-card border-t">
       <div className="container mx-auto px-4 py-12">
@@ -24,8 +27,8 @@ const Footer = () => {
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">
               Quick Links
             </h4>
-            <ul className="space-y-2">
-              {["Updates", "Jobs", "Alerts", "News"].map((link) => (
+                        <ul className="space-y-2">
+              {["Updates", "Jobs", "Alerts", "News"].map((link) => ( 
                 <li key={link}>
                   <Button 
                     variant="ghost" 
@@ -41,6 +44,29 @@ const Footer = () => {
                   </Button>
                 </li>
               ))}
+              <li>
+                <Button 
+                  variant="ghost" 
+                  className="h-auto p-0 text-sm text-muted-foreground hover:text-primary"
+                  onClick={() => {
+                    const element = document.querySelector("#app-download");
+                    if (element) {
+                      element.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                >
+                  App Download
+                </Button>
+              </li>
+              <li>
+                <Button 
+                  variant="ghost" 
+                  className="h-auto p-0 text-sm text-muted-foreground hover:text-primary"
+                  onClick={() => navigate("/admin/login")}
+                >
+                  Admin Login
+                </Button>
+              </li>
             </ul>
           </div>
 
